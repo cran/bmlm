@@ -6,15 +6,13 @@ For an example, please see [a short introduction to bmlm](https://mvuorre.github
 
 # Install
 
-### Pre-requisites 
+To install the latest stable version of bmlm from CRAN, run 
 
-Please ensure you have the latest version of R installed.
+```r
+install.packages("bmlm")
+```
 
-This package depends on [Stan](http://mc-stan.org/). Please see [here](http://mc-stan.org/interfaces/rstan.html) for how to install the R Stan interface.
-
-### Installing bmlm
-
-Currently, bmlm is only available on GitHub, and therefore requires [devtools](https://cran.r-project.org/package=devtools) for installation. If you don't have the devtools package installed in R, first run this line:
+The latest version (with possible added functionality) of bmlm requires [devtools](https://cran.r-project.org/package=devtools) for installation. If you don't have the devtools package installed in R, first run this line:
 
 ```r
 install.packages(devtools)
@@ -23,8 +21,10 @@ install.packages(devtools)
 Then proceed to install bmlm:
 
 ```r
-devtools::install_github("mvuorre/bmlm")
+devtools::install_github("mvuorre/bmlm", args = "--preclean")
 ```
+
+(Additional installation instructions [here](https://mvuorre.github.io/bmlm/index.html#installing_bmlm).)
 
 ## Example
 
@@ -44,5 +44,5 @@ mlm_summary(fit)
 
 # Information
 
-bmlm is in active development, please contact the author of the package for questions and suggestions.
+Please contact the author of the package for questions and suggestions. I recommend creating a new issue on GitHub.
 
