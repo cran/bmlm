@@ -210,10 +210,10 @@ public:
         ++num_params_r__;
         ++num_params_r__;
         ++num_params_r__;
-        ++num_params_r__;
         num_params_r__ += ((K * (K - 1)) / 2);
         num_params_r__ += K;
         num_params_r__ += K * J;
+        ++num_params_r__;
     }
 
     ~model_bmlm() { }
@@ -266,19 +266,6 @@ public:
             writer__.scalar_unconstrain(b);
         } catch (const std::exception& e) { 
             throw std::runtime_error(std::string("Error transforming variable b: ") + e.what());
-        }
-
-        if (!(context__.contains_r("sigma_y")))
-            throw std::runtime_error("variable sigma_y missing");
-        vals_r__ = context__.vals_r("sigma_y");
-        pos__ = 0U;
-        context__.validate_dims("initialization", "sigma_y", "double", context__.to_vec());
-        double sigma_y(0);
-        sigma_y = vals_r__[pos__++];
-        try {
-            writer__.scalar_lb_unconstrain(0,sigma_y);
-        } catch (const std::exception& e) { 
-            throw std::runtime_error(std::string("Error transforming variable sigma_y: ") + e.what());
         }
 
         if (!(context__.contains_r("dm")))
@@ -364,6 +351,19 @@ public:
             throw std::runtime_error(std::string("Error transforming variable z_U: ") + e.what());
         }
 
+        if (!(context__.contains_r("sigma_y")))
+            throw std::runtime_error("variable sigma_y missing");
+        vals_r__ = context__.vals_r("sigma_y");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "sigma_y", "double", context__.to_vec());
+        double sigma_y(0);
+        sigma_y = vals_r__[pos__++];
+        try {
+            writer__.scalar_lb_unconstrain(0,sigma_y);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable sigma_y: ") + e.what());
+        }
+
         params_r__ = writer__.data_r();
         params_i__ = writer__.data_i();
     }
@@ -415,13 +415,6 @@ public:
         else
             b = in__.scalar_constrain();
 
-        T__ sigma_y;
-        (void) sigma_y;  // dummy to suppress unused var warning
-        if (jacobian__)
-            sigma_y = in__.scalar_lb_constrain(0,lp__);
-        else
-            sigma_y = in__.scalar_lb_constrain(0);
-
         T__ dm;
         (void) dm;  // dummy to suppress unused var warning
         if (jacobian__)
@@ -463,6 +456,13 @@ public:
             z_U = in__.matrix_constrain(K,J,lp__);
         else
             z_U = in__.matrix_constrain(K,J);
+
+        T__ sigma_y;
+        (void) sigma_y;  // dummy to suppress unused var warning
+        if (jacobian__)
+            sigma_y = in__.scalar_lb_constrain(0,lp__);
+        else
+            sigma_y = in__.scalar_lb_constrain(0);
 
 
         // transformed parameters
@@ -553,13 +553,13 @@ public:
         names__.push_back("dy");
         names__.push_back("cp");
         names__.push_back("b");
-        names__.push_back("sigma_y");
         names__.push_back("dm");
         names__.push_back("a");
         names__.push_back("sigma_m");
         names__.push_back("L_Omega");
         names__.push_back("tau");
         names__.push_back("z_U");
+        names__.push_back("sigma_y");
         names__.push_back("U");
         names__.push_back("Omega");
         names__.push_back("Sigma");
@@ -598,8 +598,6 @@ public:
         dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
-        dimss__.push_back(dims__);
-        dims__.resize(0);
         dims__.push_back(K);
         dims__.push_back(K);
         dimss__.push_back(dims__);
@@ -609,6 +607,8 @@ public:
         dims__.resize(0);
         dims__.push_back(K);
         dims__.push_back(J);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
         dims__.push_back(J);
@@ -678,17 +678,16 @@ public:
         double dy = in__.scalar_constrain();
         double cp = in__.scalar_constrain();
         double b = in__.scalar_constrain();
-        double sigma_y = in__.scalar_lb_constrain(0);
         double dm = in__.scalar_constrain();
         double a = in__.scalar_constrain();
         double sigma_m = in__.scalar_lb_constrain(0);
         matrix_d L_Omega = in__.cholesky_corr_constrain(K);
         vector_d tau = in__.vector_lb_constrain(0,K);
         matrix_d z_U = in__.matrix_constrain(K,J);
+        double sigma_y = in__.scalar_lb_constrain(0);
         vars__.push_back(dy);
         vars__.push_back(cp);
         vars__.push_back(b);
-        vars__.push_back(sigma_y);
         vars__.push_back(dm);
         vars__.push_back(a);
         vars__.push_back(sigma_m);
@@ -705,6 +704,7 @@ public:
                 vars__.push_back(z_U(k_0__, k_1__));
             }
         }
+        vars__.push_back(sigma_y);
 
         if (!include_tparams__) return;
         // declare and define transformed parameters
@@ -903,9 +903,6 @@ public:
         param_name_stream__ << "b";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
-        param_name_stream__ << "sigma_y";
-        param_names__.push_back(param_name_stream__.str());
-        param_name_stream__.str(std::string());
         param_name_stream__ << "dm";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
@@ -933,6 +930,9 @@ public:
                 param_names__.push_back(param_name_stream__.str());
             }
         }
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "sigma_y";
+        param_names__.push_back(param_name_stream__.str());
 
         if (!include_gqs__ && !include_tparams__) return;
         for (int k_1__ = 1; k_1__ <= K; ++k_1__) {
@@ -1035,9 +1035,6 @@ public:
         param_name_stream__ << "b";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
-        param_name_stream__ << "sigma_y";
-        param_names__.push_back(param_name_stream__.str());
-        param_name_stream__.str(std::string());
         param_name_stream__ << "dm";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
@@ -1063,6 +1060,9 @@ public:
                 param_names__.push_back(param_name_stream__.str());
             }
         }
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "sigma_y";
+        param_names__.push_back(param_name_stream__.str());
 
         if (!include_gqs__ && !include_tparams__) return;
         for (int k_1__ = 1; k_1__ <= K; ++k_1__) {
@@ -1368,7 +1368,6 @@ public:
         ++num_params_r__;
         ++num_params_r__;
         ++num_params_r__;
-        ++num_params_r__;
         num_params_r__ += ((K * (K - 1)) / 2);
         num_params_r__ += K;
         num_params_r__ += K * J;
@@ -1424,19 +1423,6 @@ public:
             writer__.scalar_unconstrain(b);
         } catch (const std::exception& e) { 
             throw std::runtime_error(std::string("Error transforming variable b: ") + e.what());
-        }
-
-        if (!(context__.contains_r("sigma_y")))
-            throw std::runtime_error("variable sigma_y missing");
-        vals_r__ = context__.vals_r("sigma_y");
-        pos__ = 0U;
-        context__.validate_dims("initialization", "sigma_y", "double", context__.to_vec());
-        double sigma_y(0);
-        sigma_y = vals_r__[pos__++];
-        try {
-            writer__.scalar_lb_unconstrain(0,sigma_y);
-        } catch (const std::exception& e) { 
-            throw std::runtime_error(std::string("Error transforming variable sigma_y: ") + e.what());
         }
 
         if (!(context__.contains_r("dm")))
@@ -1573,13 +1559,6 @@ public:
         else
             b = in__.scalar_constrain();
 
-        T__ sigma_y;
-        (void) sigma_y;  // dummy to suppress unused var warning
-        if (jacobian__)
-            sigma_y = in__.scalar_lb_constrain(0,lp__);
-        else
-            sigma_y = in__.scalar_lb_constrain(0);
-
         T__ dm;
         (void) dm;  // dummy to suppress unused var warning
         if (jacobian__)
@@ -1711,7 +1690,6 @@ public:
         names__.push_back("dy");
         names__.push_back("cp");
         names__.push_back("b");
-        names__.push_back("sigma_y");
         names__.push_back("dm");
         names__.push_back("a");
         names__.push_back("sigma_m");
@@ -1743,8 +1721,6 @@ public:
     void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
         dimss__.resize(0);
         std::vector<size_t> dims__;
-        dims__.resize(0);
-        dimss__.push_back(dims__);
         dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
@@ -1836,7 +1812,6 @@ public:
         double dy = in__.scalar_constrain();
         double cp = in__.scalar_constrain();
         double b = in__.scalar_constrain();
-        double sigma_y = in__.scalar_lb_constrain(0);
         double dm = in__.scalar_constrain();
         double a = in__.scalar_constrain();
         double sigma_m = in__.scalar_lb_constrain(0);
@@ -1846,7 +1821,6 @@ public:
         vars__.push_back(dy);
         vars__.push_back(cp);
         vars__.push_back(b);
-        vars__.push_back(sigma_y);
         vars__.push_back(dm);
         vars__.push_back(a);
         vars__.push_back(sigma_m);
@@ -2061,9 +2035,6 @@ public:
         param_name_stream__ << "b";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
-        param_name_stream__ << "sigma_y";
-        param_names__.push_back(param_name_stream__.str());
-        param_name_stream__.str(std::string());
         param_name_stream__ << "dm";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
@@ -2191,9 +2162,6 @@ public:
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
         param_name_stream__ << "b";
-        param_names__.push_back(param_name_stream__.str());
-        param_name_stream__.str(std::string());
-        param_name_stream__ << "sigma_y";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
         param_name_stream__ << "dm";
