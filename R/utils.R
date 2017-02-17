@@ -16,7 +16,7 @@
 #'  \item{Parameter}{Name of parameter}
 #'  \item{Mean}{Mean of parameter's posterior distribution.}
 #'  \item{Median}{Median of parameter's posterior distribution.}
-#'  \item{SD}{Standard deviation of parameter's posterior distribution.}
+#'  \item{SE}{Standard deviation of parameter's posterior distribution.}
 #'  \item{ci_lwr}{The lower limit of Credible Intervals.}
 #'  \item{ci_upr}{The upper limit of Credible Intervals.}
 #'  \item{n_eff}{Number of efficient samples.}
@@ -25,7 +25,7 @@
 #'
 #' @details After estimating a model (drawing samples from the joint posterior
 #' probability distribution) with \code{mlm()}, show the estimated results
-#' by using \code{mlm_summary(fit)}, where "fit" is an object containing
+#' by using \code{mlm_summary(fit)}, where \code{fit} is an object containing
 #' the fitted model.
 #'
 #' The function shows, for each parameter specified with \code{pars},
@@ -43,19 +43,24 @@
 #' \describe{
 #'  \item{a}{Regression slope of the X -> M relationship.}
 #'  \item{b}{Regression slope of the M -> Y relationship.}
-#'  \item{cp}{Regression slope of the X -> Y relationship.
-#'  (The direct effect.)}
-#'  \item{ab}{Mediated effect (\code{a * b}).}
-#'  \item{c}{Total effect of X on Y. ( \eqn{cp + ab + \sigma_ab} )}
+#'  \item{cp}{Regression slope of the X -> Y relationship. (Direct effect.)}
+#'  \item{me}{Mediated effect (\eqn{a * b + \sigma_{{a_j}{b_j}}}).}
+#'  \item{c}{Total effect of X on Y. ( \eqn{cp + me} )}
 #'  \item{pme}{Percent mediated effect.}
-#'  \item{covab}{Estimated covariance of the
-#'  participant-level a_j and b_j parameters.}
-#'  \item{corrab}{Estimated correlation of the
-#'  participant-level a_j and b_j parameters.}
 #'}
 #' The user may specify \code{pars = NULL} to display all estimated parameters.
 #' Other options include e.g. \code{pars = "tau"} to display the varying
-#' effects' standard deviations.
+#' effects' standard deviations. To display all the group-level parameters
+#' (also known as random effects) only, specify \code{pars = "random"}.
+#' With this argument, \code{mlm_summary()} prints the following parameters:
+#'
+#' \describe{
+#'  \item{tau_a}{Standard deviation of subject-level \code{a_j}s.}
+#'  \item{tau_b}{Standard deviation of subject-level \code{b_j}s.}
+#'  \item{tau_cp}{Standard deviation of subject-level \code{c\'_j}s.}
+#'  \item{covab}{Estimated covariance of \code{a_j} and \code{b_j}s.}
+#'  \item{corrab}{Estimated correlation of \code{a_j} and \code{b_j}s.}
+#'}
 #'
 #' To learn more about the additional parameters, refer to the Stan code
 #' (\code{cat(get_stancode(fit))}).
@@ -67,7 +72,7 @@
 mlm_summary <- function(
     mod = NULL,
     level = .95,
-    pars = c("a", "b", "cp", "ab", "c", "pme", "covab", "corrab"),
+    pars = c("a", "b", "cp", "me", "c", "pme"),
     digits = 2
     ){
 
@@ -76,6 +81,9 @@ mlm_summary <- function(
 
     # Choose which parameters to display
     if (is.null(pars)) pars <- mod@sim$pars_oi  # Return all parameters
+    if (any(pars == "random")) pars <- c(
+        "tau_a", "tau_b", "tau_cp", "covab", "corrab"
+    )
 
     # Obtain model summary from Stanfit
     lower_ci <- .5 - (level/2)
@@ -97,7 +105,7 @@ mlm_summary <- function(
     mod_sum$n_eff <- floor(mod_sum$n_eff)
     mod_sum$Parameter <- Names
     mod_sum <- mod_sum[,c(8,1,2,4,3,5,6,7)]
-    names(mod_sum) <- c("Parameter", "Mean", "SD", "Median",
+    names(mod_sum) <- c("Parameter", "Mean", "SE", "Median",
                         paste0(lower_ci*100, "%"), paste0(upper_ci*100, "%"),
                         "n_eff", "Rhat")
     row.names(mod_sum) <- NULL

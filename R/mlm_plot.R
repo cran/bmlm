@@ -7,11 +7,11 @@
 #' @param ylab Label for Y
 #' @param mlab Label for M
 #' @param level "Confidence" level for credible intervals. (Defaults to .95.)
+#' @param random Should the "random" effects SDs be displayed? (Default = TRUE)
 #' @param text Should additional parameter values be displayed?
 #' (Defaults to FALSE.)
-#' @param template Should an empty template diagram be plotted?
-#' (Defaults to FALSE.)
 #' @param id Plot an individual-level path diagram by specifying ID number.
+#' @param digits Number of significant digits to show on graph. (Default = 2.)
 #' @param ... Other arguments passed on to \code{qgraph::qgraph()}.
 #'
 #' @return A qgraph object.
@@ -20,22 +20,23 @@
 #'
 #' @details Plots a path diagram of the mediation model,
 #' with estimated parameter values and credible intervals. Can also
-#' be used to draw a template diagram of the mediation model by setting
-#' \code{template = TRUE}.
+#' be used to draw a template diagram of the mediation model by not
+#' specifying input to the \code{mod} argument.
 #'
 #' To modify various settings of the underlying qgraph object, see
 #' \code{\link[qgraph]{qgraph}}.
 #'
 #' @examples
 #' # Draw a template path diagram of the mediation model
-#' mlm_path_plot(template = TRUE)
+#' mlm_path_plot()
 #'
 #' @export
 mlm_path_plot <- function(mod = NULL, xlab = "X", ylab = "Y", mlab = "M",
                           level = .95,
+                          random = TRUE,
                           text = FALSE,
-                          template = FALSE,
                           id = NULL,
+                          digits = 2,
                           ...){
 
     # Requires the qgraph package
@@ -44,7 +45,7 @@ mlm_path_plot <- function(mod = NULL, xlab = "X", ylab = "Y", mlab = "M",
              call. = FALSE)
     }
 
-    if (template) {
+    if (is.null(mod)) {
         # If user wants a template diagram
         edgelabels <- c(" \n  a  \n ", " \n  b  \n ", " \n  c'  \n ")
         x <- matrix(c(1, 1, 0,
@@ -54,7 +55,8 @@ mlm_path_plot <- function(mod = NULL, xlab = "X", ylab = "Y", mlab = "M",
         if (!(class(mod) == "stanfit")) {
             stop("Model is not a stanfit object.", call. = FALSE)
         }
-        params <- c("a", "b", "cp", "ab", "c", "pme")
+        params <- c("a", "b", "cp", "me", "c", "pme",
+                    "tau_a", "tau_b", "tau_cp", "covab")
         # Specify whether person-specific or average params given
         if (!is.null(id)){  # If person-specific model requested
             if (id > mod@sim$dims_oi$u_a) {
@@ -68,22 +70,40 @@ mlm_path_plot <- function(mod = NULL, xlab = "X", ylab = "Y", mlab = "M",
         } else {  # Give average model
             sfit <- mlm_summary(mod,
                                 pars = params,
-                                level = level)
+                                level = level,
+                                digits = 6)
         }
 
-        sfit <- subset(sfit, select = c(1,2,5,6))
-        a <- sfit[sfit$Parameter == "a", c(2:4)]
-        b <- sfit[sfit$Parameter == "b", c(2:4)]
-        cp <- sfit[sfit$Parameter == "cp", c(2:4)]
-        ab <- sfit[sfit$Parameter == "ab", c(2:4)]
-        c <- sfit[sfit$Parameter == "c", c(2:4)]
-        pme <- sfit[sfit$Parameter == "pme", c(2:4)]
+        sfit <- subset(sfit, select = c(1,2,3,5,6))
+        sfit[,2:5] <- signif(sfit[,2:5], digits)
+        a <- sfit[sfit$Parameter == "a", c(2:5)]
+        b <- sfit[sfit$Parameter == "b", c(2:5)]
+        cp <- sfit[sfit$Parameter == "cp", c(2:5)]
+        me <- sfit[sfit$Parameter == "me", c(2:5)]
+        c <- sfit[sfit$Parameter == "c", c(2:5)]
+        pme <- sfit[sfit$Parameter == "pme", c(2:5)]
+        tau_a <- sfit[sfit$Parameter == "tau_a", c(2:5)]
+        tau_b <- sfit[sfit$Parameter == "tau_b", c(2:5)]
+        tau_cp <- sfit[sfit$Parameter == "tau_cp", c(2:5)]
+        covab <- sfit[sfit$Parameter == "covab", c(2:5)]
 
         edgelabels <- c(
-            paste0("\n", a[1], " \n   [", a[2], ", ", a[3], "]   \n"),
-            paste0("\n", b[1], " \n  [", b[2], ", ", b[3], "]   \n"),
-            paste0("\n", cp[1], " \n   [", cp[2], ", ", cp[3], "]   \n")
+            paste0("\na = ", a[1], "\n [", a[3], ", ", a[4], "] \n"),
+            paste0("\nb = ", b[1], "\n [", b[3], ", ", b[4], "] \n"),
+            paste0("\nc' = ", cp[1], "\n [", cp[3], ", ", cp[4], "] \n")
         )
+
+        if (random) {
+            edgelabels <- c(
+                paste0("\na = ", a[1], "\n [", a[3], ", ", a[4], "] \n",
+                       "SD = ", tau_a[1], "\n [", tau_a[3], ", ", tau_a[4], "] \n"),
+                paste0("\nb = ", b[1], "\n [", b[3], ", ", b[4], "] \n",
+                       "SD = ", tau_b[1], "\n [", tau_b[3], ", ", tau_b[4], "] \n"),
+                paste0("\nc' = ", cp[1], "\n [", cp[3], ", ", cp[4], "] \n",
+                       "SD = ", tau_cp[1], "\n [", tau_cp[3], ", ", tau_cp[4], "] \n")
+            )
+        }
+
         x <- matrix(as.numeric(c(1, b[1], 0,
                                  0, 1, 0,
                                  a[1], cp[1] ,1)), byrow=T, nrow = 3)
@@ -94,12 +114,13 @@ mlm_path_plot <- function(mod = NULL, xlab = "X", ylab = "Y", mlab = "M",
     qargs$input <- x
     qargs$labels <- c(mlab, ylab, xlab)
     if (is.null(qargs$border.width)) qargs$border.width <- 2
-    if (is.null(qargs$edge.label.cex)) qargs$edge.label.cex <- 1.2
+    if (is.null(qargs$edge.label.cex)) qargs$edge.label.cex <- 1.1
     if (is.null(qargs$edge.color)) qargs$edge.color <- "black"
     if (is.null(qargs$vsize)) qargs$vsize <- 16
     if (is.null(qargs$vsize2)) qargs$vsize2 <- 12
     if (is.null(qargs$asize)) qargs$asize <- 4
     if (is.null(qargs$esize)) qargs$esize <- 4
+    if (is.null(qargs$label.cex)) qargs$label.cex <- 1.2
     if (is.null(qargs$label.norm)) qargs$label.norm <- "OOOOOO"
     if (is.null(qargs$edge.labels)) qargs$edge.labels <- edgelabels
     if (is.null(qargs$mar)) qargs$mar <- c(4, 4, 4, 4)
@@ -115,16 +136,19 @@ mlm_path_plot <- function(mod = NULL, xlab = "X", ylab = "Y", mlab = "M",
     if (!is.null(id)) {
         graphics::text(1.25, 1.25, paste0("ID: ", id), font = 2)
     }
-    if (text & !template){
+    if (text & !is.null(mod)){
         graphics::text(
-            -1.2, 1.1,
-            paste0("ab = ", ab[1], " [", ab[2], ", ", ab[3], "]"), pos=4)
+            -1.2, 1.2,
+            paste0("me = ", me[1], " [", me[3], ", ", me[4], "]"), pos=4)
+        graphics::text(
+            -1.2, 1.05,
+            paste0("c = ", c[1], " [", c[3], ", ", c[4], "]"), pos=4)
         graphics::text(
             -1.2, 0.9,
-            paste0("c = ", c[1], " [", c[2], ", ", c[3], "]"), pos=4)
+            paste0("%me = ", pme[1], " [", pme[3], ", ", pme[4], "]"), pos=4)
         graphics::text(
-            -1.2, 0.7,
-            paste0("%me = ", pme[1], " [", pme[2], ", ", pme[3], "]"), pos=4)
+            -1.2, 0.75,
+            paste0("cov(a,b) = ", covab[1], " [", covab[3], ", ", covab[4], "]"), pos=4)
     }
 }
 
@@ -157,7 +181,7 @@ mlm_pars_plot <- function(mod = NULL,
                           p_size = 1.2,
                           level = 0.95,
                           nrow = 3,
-                          pars = c("a", "b", "cp", "corrab", "ab", "c", "pme")){
+                          pars = c("a", "b", "cp", "covab", "me", "c", "pme")){
 
     # Requires the reshape2 package
     if (!requireNamespace("reshape2", quietly = TRUE)) {
