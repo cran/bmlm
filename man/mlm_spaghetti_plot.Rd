@@ -5,8 +5,9 @@
 \title{Plot fitted values of M and Y from multilevel mediation model}
 \usage{
 mlm_spaghetti_plot(mod = NULL, d = NULL, id = "id", x = "x", m = "m",
-  y = "y", level = 0.95, n = 12, binary_y = FALSE, fixed = TRUE,
-  random = TRUE, n_samples = NA)
+  y = "y", level = 0.95, n = 12, binary_y = FALSE, mx = "fitted",
+  fixed = TRUE, random = TRUE, h_jitter = 0, v_jitter = 0,
+  bar_width = 0.2, bar_size = 0.75, n_samples = NA)
 }
 \arguments{
 \item{mod}{A multilevel mediation model estimated with \code{mlm()}.}
@@ -28,9 +29,20 @@ See details.}
 
 \item{binary_y}{Set to TRUE if the outcome variable (Y) is 0/1.}
 
+\item{mx}{Should the X axis of the M-Y figure be "fitted" values,
+or "data" values. Defaults to "fitted".}
+
 \item{fixed}{Should the population-level ("fixed") fitted values be shown?}
 
 \item{random}{Should the subject-level ("random") fitted values be shown?}
+
+\item{h_jitter}{Horizontal jitter of points. Defaults to 0.}
+
+\item{v_jitter}{Vertical jitter of points. Defaults to 0.}
+
+\item{bar_width}{Width of the error bars. Defaults to 0.2.}
+
+\item{bar_size}{Thickness of the error bars. Defaults to 0.75.}
 
 \item{n_samples}{Number of MCMC samples to use in calculating fitted values.
 See details.}
