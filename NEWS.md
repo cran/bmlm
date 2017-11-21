@@ -1,3 +1,8 @@
+# bmlm 1.3.4
+
+* Minor cleaning of Stan code
+* Fix typos in documentation
+
 # bmlm 1.3.3
 
 * Change the label '%me' to 'pme' (for proportion mediated effect) in output of mlm_path_plot(..., text = TRUE).

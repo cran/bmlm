@@ -27,7 +27,7 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_bmlm");
-    reader.add_event(148, 148, "end", "model_bmlm");
+    reader.add_event(141, 141, "end", "model_bmlm");
     return reader;
 }
 
@@ -541,13 +541,6 @@ public:
 
                 stan::math::initialize(mu_m, DUMMY_VAR__);
                 stan::math::fill(mu_m,DUMMY_VAR__);
-                validate_non_negative_index("L_Sigma", "K", K);
-                validate_non_negative_index("L_Sigma", "K", K);
-                Eigen::Matrix<T__,Eigen::Dynamic,Eigen::Dynamic>  L_Sigma(static_cast<Eigen::VectorXd::Index>(K),static_cast<Eigen::VectorXd::Index>(K));
-                (void) L_Sigma;  // dummy to suppress unused var warning
-
-                stan::math::initialize(L_Sigma, DUMMY_VAR__);
-                stan::math::fill(L_Sigma,DUMMY_VAR__);
 
 
                 lp_accum__.add(normal_log<propto__>(dy, 0, prior_dy));
@@ -1325,7 +1318,7 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_bmlm_binary_y");
-    reader.add_event(147, 147, "end", "model_bmlm_binary_y");
+    reader.add_event(140, 140, "end", "model_bmlm_binary_y");
     return reader;
 }
 
@@ -1821,13 +1814,6 @@ public:
 
                 stan::math::initialize(mu_m, DUMMY_VAR__);
                 stan::math::fill(mu_m,DUMMY_VAR__);
-                validate_non_negative_index("L_Sigma", "K", K);
-                validate_non_negative_index("L_Sigma", "K", K);
-                Eigen::Matrix<T__,Eigen::Dynamic,Eigen::Dynamic>  L_Sigma(static_cast<Eigen::VectorXd::Index>(K),static_cast<Eigen::VectorXd::Index>(K));
-                (void) L_Sigma;  // dummy to suppress unused var warning
-
-                stan::math::initialize(L_Sigma, DUMMY_VAR__);
-                stan::math::fill(L_Sigma,DUMMY_VAR__);
 
 
                 lp_accum__.add(normal_log<propto__>(dy, 0, prior_dy));
