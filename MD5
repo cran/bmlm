@@ -1,6 +1,6 @@
-baefb41cafc57a705d42fe1d98711728 *DESCRIPTION
+64f9c1caf95547f251cede1de0c728dc *DESCRIPTION
 823887f83543430485b85d8596dd81a3 *NAMESPACE
-cc72286323209fcc8b53176ac98933dd *NEWS.md
+47749a60c667779ae697f9be0f3518f2 *NEWS.md
 e751d50e7dd45705c9476d677e229606 *R/bmlm-package.R
 b8e5ac987fd287497d7e70aab17d550c *R/data.R
 3117fa4730a61155ccd7b838a649d961 *R/mlm.R
@@ -36,8 +36,8 @@ ee096dff1d308b7102486712051b6ebf *man/mlm_path_plot.Rd
 394d427b9ecfd744cfb5508515bf12e5 *man/tab2doc.Rd
 8abbedbb8b749f5cc0f53f9f0e426dce *src/Makevars
 ee1f06fa53f6b420147d53202c16a4ca *src/Makevars.win
-73ee46b1f38bbef5dc8138440e61545f *src/Modules.cpp
+4f61b280464f4481d757953a9273eb79 *src/Modules.cpp
 712ca1634c9d3aea62cdac1643295237 *src/RcppExports.cpp
 5cb8d8c1e7a04d6a2b09674924afe1be *src/include/models.hpp
 1cb0ca046451b91fc4be46e748317909 *src/init.cpp
-302d95b4e6bb58e74b11eed64b108f2f *tools/make_cpp.R
+d09025e378d96d89b1a2aa6c5bf3493c *tools/make_cpp.R

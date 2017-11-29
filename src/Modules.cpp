@@ -7,7 +7,7 @@ RCPP_MODULE(stan_fit4bmlm_mod) {
 
     class_<rstan::stan_fit<model_bmlm_namespace::model_bmlm, boost::random::ecuyer1988> >("model_bmlm")
 
-    .constructor<SEXP,SEXP>()
+    .constructor<SEXP,SEXP,SEXP>()
 
 
     .method("call_sampler", &rstan::stan_fit<model_bmlm_namespace::model_bmlm, boost::random::ecuyer1988> ::call_sampler)
@@ -36,7 +36,7 @@ RCPP_MODULE(stan_fit4bmlm_binary_y_mod) {
 
     class_<rstan::stan_fit<model_bmlm_binary_y_namespace::model_bmlm_binary_y, boost::random::ecuyer1988> >("model_bmlm_binary_y")
 
-    .constructor<SEXP,SEXP>()
+    .constructor<SEXP,SEXP,SEXP>()
 
 
     .method("call_sampler", &rstan::stan_fit<model_bmlm_binary_y_namespace::model_bmlm_binary_y, boost::random::ecuyer1988> ::call_sampler)
