@@ -1,12 +1,12 @@
-81f6d6f882bbc748097a54931ffb5ebc *DESCRIPTION
-823887f83543430485b85d8596dd81a3 *NAMESPACE
-845c5fb2a08b8ffba687549679b6f5f1 *NEWS.md
+0e67db25d13b2eec2bf5df43c652fd3e *DESCRIPTION
+7eddf402870e7c3c0184e3ac1b017b30 *NAMESPACE
+479cbccc5601e1c2c379ac26915c8a56 *NEWS.md
 e751d50e7dd45705c9476d677e229606 *R/bmlm-package.R
 b8e5ac987fd287497d7e70aab17d550c *R/data.R
 3117fa4730a61155ccd7b838a649d961 *R/mlm.R
 b89164881c3522bee3a439ee46c0ee94 *R/mlm_plot.R
 8e34da485bc554f5fd48b7ed0ac7a206 *R/stanmodels.R
-9ed5c8ac27cbac50e787bb2e19153644 *R/utils.R
+5b6ddb22b37698990ba4a75178f9a6b1 *R/utils.R
 21db4c960c8ba78c0affd62f3bb48583 *R/zzz.R
 835244456b3a88558c9fac93d4c9e915 *README.md
 2bb19368407d2456784438e7963389f9 *cleanup
@@ -33,7 +33,6 @@ d1d651fa48dfc01c56dc64bc450e7231 *man/mlm_pars_plot.Rd
 ee096dff1d308b7102486712051b6ebf *man/mlm_path_plot.Rd
 40074d0c7b00fd61bd9a565d0f4a6d20 *man/mlm_spaghetti_plot.Rd
 94d66f3fe5f4d552a46debbeb316d020 *man/mlm_summary.Rd
-eeb1f71fdaf04976ed5f3798e21159ed *man/tab2doc.Rd
 8abbedbb8b749f5cc0f53f9f0e426dce *src/Makevars
 ee1f06fa53f6b420147d53202c16a4ca *src/Makevars.win
 4f61b280464f4481d757953a9273eb79 *src/Modules.cpp
