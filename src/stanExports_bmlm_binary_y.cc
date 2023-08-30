@@ -7,7 +7,7 @@ using namespace Rcpp ;
 RCPP_MODULE(stan_fit4bmlm_binary_y_mod) {
 
 
-    class_<rstan::stan_fit<stan_model, boost::random::ecuyer1988> >("model_bmlm_binary_y")
+    class_<rstan::stan_fit<stan_model, boost::random::ecuyer1988> >("rstantools_model_bmlm_binary_y")
 
     .constructor<SEXP,SEXP,SEXP>()
 
