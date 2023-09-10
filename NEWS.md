@@ -1,6 +1,11 @@
+# bmlm 1.3.14
+
+Minor fix: Let rstantools generate Makevars
+
 # bmlm 1.3.13
 
 Minor housekeeping:
+
 - Updated compiler flags thanks to @jgabry
 - Updated contact info
 

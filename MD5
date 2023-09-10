@@ -1,6 +1,6 @@
-37c372d4e7c1e96c82f58d0a361b039d *DESCRIPTION
+8495b22d436c094da149321bd2f5ec32 *DESCRIPTION
 2144c6398f867fa5c1e99414d6b94c9e *NAMESPACE
-b55621ac7cb4d2d21a2cc1c6a149418f *NEWS.md
+c76d8f67f82d160571388bfb3af7d654 *NEWS.md
 cde4fddb1264c92311b8e5d3046c9dbc *R/bmlm-package.R
 3591a747a83922721f983a8cd234ad6b *R/data.R
 3117fa4730a61155ccd7b838a649d961 *R/mlm.R
@@ -8,13 +8,13 @@ cde4fddb1264c92311b8e5d3046c9dbc *R/bmlm-package.R
 9242184f68f5424b573d3a71dd848177 *R/stanmodels.R
 cb9b636d46f52c4ce8514ec07196e480 *R/utils.R
 21db4c960c8ba78c0affd62f3bb48583 *R/zzz.R
-de8b2b138b48bee02aa88d25547c75e1 *README.md
+b9be8e836ea5700182ca118dcde0ac9f *README.md
 7080893e02c49cd296d4424b9be55069 *build/partial.rdb
 7e297a31e37e77c201a2bacff2f979eb *configure
 5fdedca26c8830d7bb06aa1c4a634204 *configure.win
 f813fa046b7756f079ae57c23d083a0e *data/BLch9.rda
 2c06feb54a4e73659ecbba1bce1f7899 *data/MEC2010.rda
-66eaed31d4d2dd0286382a323fb8419a *inst/CITATION
+64118559fc70edb32aa9bc808310cf9d *inst/CITATION
 d41d8cd98f00b204e9800998ecf8427e *inst/chunks/license.stan
 855c064dbf8deaff96c8dc8a87169109 *inst/include/stan_meta_header.hpp
 b7bbb94d2d162e33bdfca31db2b0c0c5 *inst/stan/bmlm.stan
@@ -35,10 +35,4 @@ fe69763d1c16ac3fd755f392972ef5d8 *man/mlm.Rd
 47a4822b82eb23f35459225ebf4d6ad0 *man/mlm_path_plot.Rd
 4213679ea0120c218dc41e9f7a2fd06f *man/mlm_spaghetti_plot.Rd
 2ea910cc0317d28697c8bfb3f91b3b8b *man/mlm_summary.Rd
-990d443e870055829dd08e9bdd6e886e *src/Makevars
-3eb5b34b96a22438ba31373ae0ea5fe2 *src/Makevars.win
 200cf80e23a3e7fa9f0aa300f081c56a *src/init.cpp
-a5c5aec9a13daf0acffbc318b32c5061 *src/stanExports_bmlm.cc
-568688ee926b649af1ebc4aa27a66097 *src/stanExports_bmlm.h
-0db1b09152abc620457bfda60d9b467f *src/stanExports_bmlm_binary_y.cc
-986a97e575c07a824ca853a1207d8937 *src/stanExports_bmlm_binary_y.h
