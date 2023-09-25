@@ -1,6 +1,6 @@
-8495b22d436c094da149321bd2f5ec32 *DESCRIPTION
+298a00c888e11276ce132ee1fce6d105 *DESCRIPTION
 2144c6398f867fa5c1e99414d6b94c9e *NAMESPACE
-c76d8f67f82d160571388bfb3af7d654 *NEWS.md
+461a7b9327f6ef7d6eb789f1be99ad45 *NEWS.md
 cde4fddb1264c92311b8e5d3046c9dbc *R/bmlm-package.R
 3591a747a83922721f983a8cd234ad6b *R/data.R
 3117fa4730a61155ccd7b838a649d961 *R/mlm.R
@@ -14,13 +14,13 @@ b9be8e836ea5700182ca118dcde0ac9f *README.md
 5fdedca26c8830d7bb06aa1c4a634204 *configure.win
 f813fa046b7756f079ae57c23d083a0e *data/BLch9.rda
 2c06feb54a4e73659ecbba1bce1f7899 *data/MEC2010.rda
-64118559fc70edb32aa9bc808310cf9d *inst/CITATION
+64808a4d6f4746d3e8ea44198b6570bf *inst/CITATION
 d41d8cd98f00b204e9800998ecf8427e *inst/chunks/license.stan
 855c064dbf8deaff96c8dc8a87169109 *inst/include/stan_meta_header.hpp
 b7bbb94d2d162e33bdfca31db2b0c0c5 *inst/stan/bmlm.stan
-b43ca5c3147144db2f82e4239857e7bd *inst/stan/bmlm_binary_y.stan
+1f2665917f4f820f7d34d07e440f068d *inst/stan/bmlm_binary_y.stan
 d41d8cd98f00b204e9800998ecf8427e *inst/stan/chunks/common_functions.stan
-cbb44db225288aa13763c327ee2bbef2 *inst/stan/chunks/data.stan
+ee62d219f28558b31c1723045cfdb2ea *inst/stan/chunks/data.stan
 50ef345c14337988d19165baac3f4ac1 *inst/stan/chunks/generated_quantities.stan
 c114e771e489e0c2b1c3928531def3fb *inst/stan/chunks/model.stan
 095fe5c019ff8c05c45f8906bf44c3c4 *inst/stan/chunks/parameters.stan
